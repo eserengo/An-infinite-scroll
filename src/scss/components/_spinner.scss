@@ -1,0 +1,27 @@
+.spinner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.5rem;
+
+  .icon {
+    width: 2rem;
+    aspect-ratio: 1;
+    animation: spin 1s ease 0s infinite normal;
+  }
+
+  .text {
+    font-size: 1.5rem;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
