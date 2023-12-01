@@ -5,10 +5,12 @@
  GitHub: https://github.com/eserengo/
 */
 
-@import "./scss/components/_main";
+@import "./scss/components/_head";
 @import "./scss/components/_preview";
+@import "./scss/components/_grid";
 @import "./scss/components/_spinner";
 @import "./scss/components/_error";
+@import "./scss/components/_foot";
 
 :root {
   font-family: "Roboto", sans-serif;

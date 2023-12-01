@@ -19,7 +19,7 @@ function App() {
       hasError: false,
     }));
     try {
-      const response = await fetch(`https://pixabay.com/api/?key=${key}&image_type=illustration&page=${state.page}`);
+      const response = await fetch(`https://pixabay.com/api/?key=${key}&image_type=photo&page=${state.page}`);
       if (response.ok) {
         const json = await response.json();
         setState((prevState) => ({
@@ -27,7 +27,13 @@ function App() {
           isLoading: false,
           page: prevState.page + 1,
         }));
-        json && setData((prevData) => [...prevData, ...json.hits]);
+        setData((prevData) => {
+          const source = [...prevData, ...json.hits];
+          const ids = source.map(({ id }) => id);
+          const filtered = source.filter(({ id }, index) =>
+            !ids.includes(id, index + 1));
+          return filtered;
+        });
         return;
       }
       throw new Error();
@@ -64,27 +70,37 @@ function App() {
 
   return (
     <>
-      <main className="main">
-        <section className="preview">
-          { data &&
-            data.map(item => (
-              <img key={`${state.page}${item.id}`} src={item.previewURL} alt={item.user} className="thumbnail" />
+      <header className="head">
+        <h1 className="text">Find the best images for your project</h1>
+      </header>
+      <main className="preview">
+        <section className="grid">
+          {data && data
+            .map(item => (
+              <img key={item.id} src={item.previewURL} alt={item.user} className="thumbnail" />
             ))
           }
-          <div ref={observerTarget}></div>
         </section>
-        { state.isLoading && (
+        {state.isLoading && (
           <section className="spinner">
             <Spinner />
             <h2 className="text">Loading...</h2>
           </section>
         )}
-        { state.hasError && (
+        {state.hasError && (
           <section className="error">
-            <h2 className="text">Error: No results found.</h2>
+            <h2 className="text">Error: No results founded.</h2>
           </section>
         )}
+        <div ref={observerTarget}></div>
       </main>
+      <footer className="foot">
+        <h3 className="text">
+          All images from &nbsp;
+          <a href="https://pixabay.com/" target="_blank" rel="noreferrer" className="link">Pixabay</a>
+          &nbsp; go and support them.
+        </h3>
+      </footer>
     </>
   )
 }
